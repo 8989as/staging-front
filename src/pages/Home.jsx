@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
-import api from '../services/api';
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
 import HomeHero from '../components/HomeHero/HomeHero';
 import CatSlider from '../components/CatSlider/CatSlider';
-// import ProductCard from '../components/ProductCard/ProductCard';
 import { ConnectedProductCard } from "../components/ProductCard";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import { sampleProducts } from '../ProductData';
 
 const Home = () => {
     const { t, i18n } = useTranslation();
@@ -20,19 +19,22 @@ const Home = () => {
     useEffect(() => {
         setLoading(true);
         setError(null);
-        api.get('/api/products?new=1&limit=4')
-            .then((res) => {
-                setProducts(res.data || []);
-                setLoading(false);
-            })
-            .catch((err) => {
-                setError(err?.message || 'Error fetching products');
-                setLoading(false);
-            });
+        // Use sampleProducts instead of API call
+        setProducts(sampleProducts);
+        setLoading(false);
     }, []);
 
     const handleViewProductDetails = (productId) => {
         navigate(`/product/${productId}`);
+    };
+
+    // Dummy handler for favorite toggle (if needed)
+    const handleToggleFavorite = (productId) => {
+        setFavorites((prev) =>
+            prev.includes(productId)
+                ? prev.filter((id) => id !== productId)
+                : [...prev, productId]
+        );
     };
 
     return (
@@ -51,18 +53,8 @@ const Home = () => {
                         {products.map((product) => (
                             <div className="col-md-4 mb-4" key={product.id}>
                                 <ConnectedProductCard
-                                    image={product.images?.[0]?.medium_image_url || product.images?.[0]?.url || 'assets/images/product_1.png'}
-                                    name={i18n.language === 'ar' ? product.name : (product.name_latin || product.name)}
-                                    latinName={product.name_latin || ''}
-                                    price={product.price}
+                                    productData={product}
                                     isFavorite={favorites.includes(product.id)}
-                                    // onFavoriteClick={() => {
-                                    //     setFavorites((prev) =>
-                                    //         prev.includes(product.id)
-                                    //             ? prev.filter((id) => id !== product.id)
-                                    //             : [...prev, product.id]
-                                    //     );
-                                    // }}
                                     onFavoriteClick={() => handleToggleFavorite(product.id)}
                                     onViewDetails={() => handleViewProductDetails(product.id)}
                                 />

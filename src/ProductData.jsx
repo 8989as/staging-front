@@ -90,9 +90,9 @@ export const sampleProducts = [
 ];
 
 export const sampleCategories = [
-  { value: 1, label: "نباتات منزلية" },
-  { value: 2, label: "نباتات عطرية" },
-  { value: 3, label: "نباتات زينة" }
+  { id : 1, value: 1, label: "نباتات منزلية" },
+  { id : 2, value: 2, label: "نباتات عطرية" },
+  { id : 3, value: 3, label: "نباتات زينة" }
 ];
 
 export const sampleColors = [
